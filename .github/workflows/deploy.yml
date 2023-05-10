@@ -5,50 +5,59 @@ on:
     branches: 
       - auto-update
 jobs:
-  check: 
+  docker:
     runs-on: ubuntu-latest
-    outputs:
-      needs-updating: ${{ steps.check.outputs.needs-updating }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: Check if update available
         id: check
         uses: lucacome/docker-image-update-checker@v1
         with:
           base-image: ubuntu:22.04
           image: testing-branch/auto-update:latest
-          platforms: linux/amd64, linux/arm64
-  build: 
-    needs: check
-    runs-on: ubuntu-latest
-    permissions: 
-      contents: read
-      packages: write
 
-    if: needs.check.outputs.needs-updating == 'true'
-    steps:
-      - name: Checkout repositry
-        uses: actions/checkout@v3
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: testing-branch/auto-update:latest
+        if: steps.check.outputs.needs-updating == 'true'
+  # build: 
+  #   needs: check
+  #   runs-on: ubuntu-latest
+  #   permissions: 
+  #     contents: read
+  #     packages: write
+
+  #   if: needs.check.outputs.needs-updating == 'true'
+  #   steps:
+  #     - name: Checkout repositry
+  #       uses: actions/checkout@v3
  
-      - name: pull updated base image
-        run: | 
-            docker pull ubuntu:22.04
+  #     - name: pull updated base image
+  #       run: | 
+  #           docker pull ubuntu:22.04
       
-      - name: Log in to the Container registry
-        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-        with: 
-            registry: ghcr.io
-            username: ${{ github.actor }}
-            password: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: Log in to the Container registry
+  #       uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+  #       with: 
+  #           registry: ghcr.io
+  #           username: ${{ github.actor }}
+  #           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name : Rebuild docker image with updated base image
-        run: |
-            docker build -t testing-branch/auto-update:latest .
+  #     - name: Reuild the Docker image
+  #       run: |
+  #          testing-branch/
+  #          [[ "$GITHUB_REF_NAME" == "master" ]] && export TAG="latest" || TAG="$GITHUB_REF_NAME"
+  #          docker build . --tag ghcr.io/getfundwave/fundwave:$TAG
 
-      - name: Publish new rebuild docker image
-        env:
-            TOKEN: ${{secrets.GITHUB_TOKEN}}
-        run: |
-            if [ "${{ steps.check.outputs.needs-updating }}" == "true" ]; then
-              [[ "$GITHUB_REF_NAME" == "master" ]] && export TAG="latest" || TAG="$GITHUB_REF_NAME"
-              docker push ghcr.io/testing-branch/auto-update:latest
-            fi
+  #     - name: Publish new docker image
+  #       env:
+  #         TOKEN: ${{secrets.GITHUB_TOKEN}}
+  #       run: |
+  #         echo  $TOKEN | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
+  #         [[ "$GITHUB_REF_NAME" == "master" ]] && export TAG="latest" || TAG="$GITHUB_REF_NAME"
+  #         docker push ghcr.io/getfundwave/fundwave:$TAG
