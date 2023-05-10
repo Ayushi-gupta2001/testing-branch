@@ -31,7 +31,7 @@ jobs:
 build:
     needs: check
     runs-on: ubuntu-latest
-    if: needs.check.outputs.need_update.result == 'true'
+    if: needs.check.outputs.need_update == 'true'
     steps:
       - run: echo "Need update"
 
