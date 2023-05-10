@@ -51,9 +51,7 @@ jobs:
             password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Reuild the Docker image
-        run: |
-           testing-branch/
-           docker build . --tag ghcr.io/ayushi-gupta2001/testing-branch/auto-update:latest
+        run: docker build . --tag ghcr.io/ayushi-gupta2001/testing-branch/auto-update:latest
 
       - name: Check if container is working with rebuild image
         run: | 
