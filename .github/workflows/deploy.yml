@@ -15,7 +15,7 @@ jobs:
 
       - name: Check if update available
         id: check
-        uses:  twiddler/is-my-docker-parent-image-out-of-date@v1
+        uses: mkumatag/container-image-updater-action@v1.0.5
         with:
           base-image: library/ubuntu:22.04
           image: testing-branch/auto-update:latest
