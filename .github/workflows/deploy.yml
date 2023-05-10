@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     if: needs.check.outputs.need_update.result == 'false'
     steps: 
-      - run: echo "No need to update"
+      - run: echo "No need to update Image"
 
       # - name: if it is update , notifiy us!!
       #   run: echo need_update ${{steps.check_update.output.need_update }}
