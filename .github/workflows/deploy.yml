@@ -4,7 +4,6 @@ on:
   push:
     branches: 
       - auto-update
-
 jobs:
   check: 
     runs-on: ubuntu-latest
@@ -20,14 +19,25 @@ jobs:
 build:
     needs: check
     runs-on: ubuntu-latest
+    permissions: 
+      contents: read
+      packages: write
+
     if: needs.check.outputs.needs-updating == 'true'
     steps:
-      - name: Checkout
+      - name: Checkout repositry
         uses: actions/checkout@v3
-
+ 
       - name: pull updated base image
         run: | 
             docker pull ubuntu:22.04
+      
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with: 
+            registry: ghcr.io
+            username: ${{ github.actor }}
+            password: ${{ secrets.GITHUB_TOKEN }}
 
       - name : Rebuild docker image with updated base image
         run: |
@@ -38,7 +48,6 @@ build:
             TOKEN: ${{secrets.GITHUB_TOKEN}}
         run: |
             if [ "${{ steps.check.outputs.needs-updating }}" == "true" ]; then
-              echo $TOKEN | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
               [[ "$GITHUB_REF_NAME" == "master" ]] && export TAG="latest" || TAG="$GITHUB_REF_NAME"
               docker push ghcr.io/testing-branch/auto-update:latest
             fi
