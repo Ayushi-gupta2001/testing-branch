@@ -4,33 +4,38 @@ on:
   push:
     branches: 
       - auto-update
+  schedule:
+    - cron: '10 01 * * *'
 
 jobs:
-  docker:
+  check: 
     runs-on: ubuntu-latest
+    outputs:
+      needs-updating: ${{ steps.check.outputs.needs-updating }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
       - name: Check if update available
         id: check
         uses: lucacome/docker-image-update-checker@v1
         with:
           base-image: ubuntu:22.04
           image: testing-branch/auto-update:latest
+build:
+    needs: check
+    runs-on: ubuntu-latest
+    if: needs.check.outputs.needs-updating == 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-      - name: pull base image
-        if: steps.check.outputs.needs-updating == 'true'
+      - name: pull updated base image
         run: | 
-            docker pull node:18-alpine
+            docker pull ubuntu:22.04
 
-      - name : Reuild docker image with new base image
+      - name : Rebuild docker image with updated base image
         run: |
-          if [ "${{ steps.check.outputs.needs-updating}}" == "true" ]; then
             docker build -t testing-branch/auto-update:latest .
-          fi
 
-      - name: Publish the docker image
+      - name: Publish new rebuild docker image
         env:
             TOKEN: ${{secrets.GITHUB_TOKEN}}
         run: |
