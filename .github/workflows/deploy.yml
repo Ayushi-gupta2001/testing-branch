@@ -33,7 +33,7 @@ jobs:
     needs: check_update    
     steps: 
       - run: echo need_update ${{needs.check_update.output.need_update }}
-        if: $needs.check_update.output.need_update == 'true'
+        # if: ${{needs.check_update.output.need_update}}== 'true'
 
   no_update_value:
     runs-on: ubuntu-latest
