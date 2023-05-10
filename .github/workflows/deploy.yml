@@ -18,6 +18,7 @@ jobs:
         with:
           base-image: nginx:1.21.0
           image: user/app:latest
+          platforms: linux/amd64,linux/arm64
 
       - name: Build and push
         uses: docker/build-push-action@v3
