@@ -14,11 +14,13 @@ jobs:
 
       - name: Check if update available
         id: check
-        uses: lucacome/docker-image-update-checker@v1
+        uses: clowa/docker-image-update-checker@342608bb9829d85eeeeb292e78115184b5a6657d
         with:
           base-image: nginx:1.21.0
           image: user/app:latest
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/arm/v6,linux/arm/v7,linux/arm64
+        env:
+          DEBUG: true
 
       - name: Build and push
         uses: docker/build-push-action@v3
