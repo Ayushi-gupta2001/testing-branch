@@ -1,4 +1,4 @@
-name: Auto build images when upstream is updated or not
+name: update image when upstream is updated
 
 on:
   push:
