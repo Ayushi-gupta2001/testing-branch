@@ -17,7 +17,7 @@ jobs:
         id: check
         uses: clowa/docker-image-update-checker@342608bb9829d85eeeeb292e78115184b5a6657d
         with:
-          base-image: ubuntu:22.04
+          base-image: library/ubuntu:22.04
           image: testing-branch/auto-update:latest
           platforms: linux/arm/v6,linux/arm/v7,linux/arm64
         env:
