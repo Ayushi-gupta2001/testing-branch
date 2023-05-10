@@ -1,4 +1,4 @@
-name: update image when upstream is updated
+name: update image when upstream is updated or not
 
 on:
   push:
