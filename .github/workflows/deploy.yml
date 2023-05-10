@@ -4,8 +4,6 @@ on:
   push:
     branches: 
       - auto-update
-  schedule:
-    - cron:  '10 12 * * *'
 
 jobs:
   docker:
@@ -20,8 +18,6 @@ jobs:
         with:
           base-image: node:18-alpine
           image: testing-branch/nmap_prod:latest
-      
-      - name: build docker base image
 
       - name: Build and push
         uses: docker/build-push-action@v3
