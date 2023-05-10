@@ -1,4 +1,4 @@
-name: update image when upstream is updated or not
+name: update image when upstream is updats
 
 on:
   push:
@@ -11,8 +11,6 @@ env:
 jobs:
   check:
     runs-on: ubuntu-latest
-    outputs:
-      needs-updating: ${{ steps.check.outputs.needs-updating }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -32,31 +30,9 @@ jobs:
           image-reg-username: ${{ github.actor }}
           image-reg-password: ${{ secrets.SECRET_TOKEN }}
 
-  update:
-    needs: check
-    runs-on: ubuntu-latest
-    if: needs.check.result == 'success'
-    steps:
-      - name: Checkout repositry
-        uses: actions/checkout@v3
- 
-      - name: pull updated base image
-        run: docker pull ubuntu:22.04
-      
-      - name: Log in to the Container registry
-        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-        with: 
-            registry: ghcr.io
-            username: ${{ github.actor }}
-            password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Get Test outputs
+        run: echo "Workflows Docker Image ${{ steps.check.outputs.needs-update }}"
 
-      - name: Reuild the Docker image
-        run: 
-          docker build . --tag ghcr.io/ayushi-gupta2001/testing-branch/auto-update:latest
-
-      - name: Check if container is working with rebuild image
-        run: | 
-            docker run --rm -it -d  ghcr.io/ayushi-gupta2001/testing-branch/auto-update:latest
-
-      - name: Publish new docker image
-        run: docker push  ghcr.io/ayushi-gupta2001/testing-branch/auto-update:latest
+      - name: Check Value
+        run: echo "Needs updating, Please update IMage"
+        if: steps.check.outputs.need-update='true'
