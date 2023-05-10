@@ -35,10 +35,7 @@ jobs:
   update:
     needs: check
     runs-on: ubuntu-latest
-    permissions: 
-      contents: read
-      packages: write
-    if: needs.check.outputs.needs-updating == 'true'
+    if: needs.check.result == 'success'
     steps:
       - name: Checkout repositry
         uses: actions/checkout@v3
