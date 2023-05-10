@@ -19,9 +19,6 @@ jobs:
         with:
           base-image: ubuntu:22.04
           image: testing-branch/auto-update:latest
-      
-      - name: Check result
-        run: echo "Needs updating: ${{ steps.check.outputs.needs-updating }}"
 
   build: 
     needs: check
