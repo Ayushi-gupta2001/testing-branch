@@ -16,7 +16,7 @@ jobs:
         with:
           base-image: ubuntu:22.04
           image: testing-branch/auto-update:latest
-build:
+  build: 
     needs: check
     runs-on: ubuntu-latest
     permissions: 
