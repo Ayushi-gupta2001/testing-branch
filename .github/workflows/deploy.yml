@@ -2,7 +2,7 @@ name: Auto build images when upstream is updated or not
 
 on:
   schedule:
-    - cron:  '0 4 * * *'
+    - cron:  '00 12 * * *'
 
 jobs:
   docker:
