@@ -15,7 +15,7 @@ jobs:
 
       - name: Check if update available
         id: check
-        uses: clowa/docker-image-update-checker@342608bb9829d85eeeeb292e78115184b5a6657d
+        uses: mkumatag/container-image-updater-action@v1.0.5
         with:
           base-image: library/ubuntu:22.04
           image: testing-branch/auto-update:latest
