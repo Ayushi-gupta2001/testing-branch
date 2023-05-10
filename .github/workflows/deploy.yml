@@ -1,4 +1,4 @@
-name: Auto build images when upstream is updated
+name: Auto build images when upstream is updated or not
 
 on:
   schedule:
