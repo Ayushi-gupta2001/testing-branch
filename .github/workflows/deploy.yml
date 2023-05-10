@@ -4,8 +4,6 @@ on:
   push:
     branches: 
       - auto-update
-  schedule:
-    - cron: '10 01 * * *'
 
 jobs:
   check: 
