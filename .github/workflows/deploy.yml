@@ -15,11 +15,10 @@ jobs:
 
       - name: Check if update available
         id: check
-        uses: mkumatag/container-image-updater-action@v1.0.5
+        uses:  twiddler/is-my-docker-parent-image-out-of-date@v1
         with:
           base-image: library/ubuntu:22.04
           image: testing-branch/auto-update:latest
-          platforms: linux/arm/v6,linux/arm/v7,linux/arm64
         env:
           DEBUG: true
          
