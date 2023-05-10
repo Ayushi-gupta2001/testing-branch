@@ -31,8 +31,6 @@ jobs:
           image: ghcr.io/ayushi-gupta2001/testing-branch/auto-update:latest
           image-reg-username: ${{ github.actor }}
           image-reg-password: ${{ secrets.SECRET_TOKEN }}
-        env:
-          DEBUG: true
 
   update:
     needs: check
@@ -46,8 +44,7 @@ jobs:
         uses: actions/checkout@v3
  
       - name: pull updated base image
-        run: | 
-            docker pull ubuntu:22.04
+        run: docker pull ubuntu:22.04
       
       - name: Log in to the Container registry
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
@@ -59,12 +56,11 @@ jobs:
       - name: Reuild the Docker image
         run: |
            testing-branch/
-           [[ "$GITHUB_REF_NAME" == "master" ]] && export TAG="latest" || TAG="$GITHUB_REF_NAME"
-           docker build . --tag ghcr.io/getfundwave/fundwave:$TAG
+           docker build . --tag ghcr.io/ayushi-gupta2001/testing-branch/auto-update:latest
 
       - name: Check if container is working with rebuild image
         run: | 
-            containerId=$(docker run --rm -it -d ghcr.io/getfundwave/fundwave:$TAG)
+            containerId=$(docker run --rm -it -d  ghcr.io/ayushi-gupta2001/testing-branch/auto-update:latest)
             sleep 60
             containerRunning=$(docker inspect --format="{{ .State.Running }}" $containerId 2> /dev/null)
             if [ "$containerRunning" == "true" ]; then
@@ -75,9 +71,4 @@ jobs:
             fi
 
       - name: Publish new docker image
-        env:
-          TOKEN: ${{secrets.GITHUB_TOKEN}}
-        run: |
-          echo  $TOKEN | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
-          [[ "$GITHUB_REF_NAME" == "master" ]] && export TAG="latest" || TAG="$GITHUB_REF_NAME"
-          docker push ghcr.io/getfundwave/fundwave:$TAG
+        run: docker push  ghcr.io/ayushi-gupta2001/testing-branch/auto-update:latest
