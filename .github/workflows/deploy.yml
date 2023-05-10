@@ -28,7 +28,7 @@ jobs:
           image-reg-username: ${{ github.actor }}
           image-reg-password: ${{ secrets.SECRET_TOKEN }}
     
-build:
+  build:
     needs: check
     runs-on: ubuntu-latest
     if: needs.check.outputs.need_update == 'true'
