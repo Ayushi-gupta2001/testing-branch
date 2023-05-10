@@ -7,6 +7,8 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
+    outputs:
+      needs-updating: ${{ steps.check.outputs.needs-updating }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -17,6 +19,10 @@ jobs:
         with:
           base-image: ubuntu:22.04
           image: testing-branch/auto-update:latest
+      
+      - name: Check result
+        run: echo "Needs updating: ${{ steps.check.outputs.needs-updating }}"
+
   build: 
     needs: check
     runs-on: ubuntu-latest
@@ -48,10 +54,11 @@ jobs:
 
       - name: Check if container is working with rebuild image
         run: | 
-            docker run --rm -it -d ghcr.io/getfundwave/fundwave:$TAG
-            containerRunning=$(docker inspect --format="{{ .State.Running }}" $containerName 2> /dev/null)
+            containerId=$(docker run --rm -it -d ghcr.io/getfundwave/fundwave:$TAG)
+            sleep 60
+            containerRunning=$(docker inspect --format="{{ .State.Running }}" $containerId 2> /dev/null)
             if [ "$containerRunning" == "true" ]; then
-              echo "new rebuild image is working"
+              echo "container is working with rebuild image"
             else 
               echo "there is an error in updated base image"
               exit 1
