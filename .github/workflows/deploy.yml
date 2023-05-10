@@ -28,7 +28,7 @@ jobs:
         uses: mkumatag/container-image-updater-action@v1.0.5
         with:
           base-image: library/ubuntu:22.04
-          image: ghcr.io/testing-branch/auto-update:latest
+          image: ghcr.io/ayushi-gupta2001/testing-branch/auto-update:latest
           image-reg-username: ${{ github.actor }}
           image-reg-password: ${{ secrets.SECRET_TOKEN }}
         env:
