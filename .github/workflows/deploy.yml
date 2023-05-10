@@ -17,47 +17,50 @@ jobs:
         with:
           base-image: ubuntu:22.04
           image: testing-branch/auto-update:latest
+  build: 
+    needs: check
+    runs-on: ubuntu-latest
+    permissions: 
+      contents: read
+      packages: write
 
-      - name: Build and push
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          push: true
-          tags: testing-branch/auto-update:latest
-        if: steps.check.outputs.needs-updating == 'true'
-  # build: 
-  #   needs: check
-  #   runs-on: ubuntu-latest
-  #   permissions: 
-  #     contents: read
-  #     packages: write
-
-  #   if: needs.check.outputs.needs-updating == 'true'
-  #   steps:
-  #     - name: Checkout repositry
-  #       uses: actions/checkout@v3
+    if: needs.check.outputs.needs-updating == 'true'
+    steps:
+      - name: Checkout repositry
+        uses: actions/checkout@v3
  
-  #     - name: pull updated base image
-  #       run: | 
-  #           docker pull ubuntu:22.04
+      - name: pull updated base image
+        run: | 
+            docker pull ubuntu:22.04
       
-  #     - name: Log in to the Container registry
-  #       uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-  #       with: 
-  #           registry: ghcr.io
-  #           username: ${{ github.actor }}
-  #           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with: 
+            registry: ghcr.io
+            username: ${{ github.actor }}
+            password: ${{ secrets.GITHUB_TOKEN }}
 
-  #     - name: Reuild the Docker image
-  #       run: |
-  #          testing-branch/
-  #          [[ "$GITHUB_REF_NAME" == "master" ]] && export TAG="latest" || TAG="$GITHUB_REF_NAME"
-  #          docker build . --tag ghcr.io/getfundwave/fundwave:$TAG
+      - name: Reuild the Docker image
+        run: |
+           testing-branch/
+           [[ "$GITHUB_REF_NAME" == "master" ]] && export TAG="latest" || TAG="$GITHUB_REF_NAME"
+           docker build . --tag ghcr.io/getfundwave/fundwave:$TAG
 
-  #     - name: Publish new docker image
-  #       env:
-  #         TOKEN: ${{secrets.GITHUB_TOKEN}}
-  #       run: |
-  #         echo  $TOKEN | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
-  #         [[ "$GITHUB_REF_NAME" == "master" ]] && export TAG="latest" || TAG="$GITHUB_REF_NAME"
-  #         docker push ghcr.io/getfundwave/fundwave:$TAG
+      - name: Check if container is working with rebuild image
+        run: | 
+            docker run --rm -it -d ghcr.io/getfundwave/fundwave:$TAG
+            containerRunning=$(docker inspect --format="{{ .State.Running }}" $containerName 2> /dev/null)
+            if [ "$containerRunning" == "true" ]; then
+              echo "new rebuild image is working"
+            else 
+              echo "there is an error in updated base image"
+              exit 1
+            fi
+
+      - name: Publish new docker image
+        env:
+          TOKEN: ${{secrets.GITHUB_TOKEN}}
+        run: |
+          echo  $TOKEN | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
+          [[ "$GITHUB_REF_NAME" == "master" ]] && export TAG="latest" || TAG="$GITHUB_REF_NAME"
+          docker push ghcr.io/getfundwave/fundwave:$TAG

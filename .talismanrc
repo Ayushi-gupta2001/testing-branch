@@ -1,4 +1,4 @@
 fileignoreconfig:
 - filename: .github/workflows/deploy.yml
-  checksum: bb9b3dd9b8722f3b6e12416421dda52b622a8fcc49dcbe85fc21f080ed614d89
+  checksum: 5fde3d1700066646b8645907658d1c0972d2af70481821583722d2b8c2fbe37e
 version: "1.0"
