@@ -16,6 +16,7 @@ jobs:
         with:
           base-image: ubuntu:22.04
           image: testing-branch/auto-update:latest
+          platforms: linux/amd64, linux/arm64
   build: 
     needs: check
     runs-on: ubuntu-latest
