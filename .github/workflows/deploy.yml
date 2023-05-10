@@ -31,8 +31,8 @@ jobs:
           image-reg-password: ${{ secrets.SECRET_TOKEN }}
 
       - name: Get Test outputs
-        run: echo "Workflows Docker Image ${{ steps.check.outputs.needs-update }}"
+        run: echo "Workflows Docker Image ${{ steps.check.needs-update }}"
 
       - name: Check Value
         run: echo "Needs updating, Please update IMage"
-        if: steps.check.outputs.need-update='true'
+        if: steps.check.need-update='true'
