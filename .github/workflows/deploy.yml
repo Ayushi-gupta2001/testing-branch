@@ -16,13 +16,26 @@ jobs:
         id: check
         uses: lucacome/docker-image-update-checker@v1
         with:
-          base-image: node:18-alpine
-          image: testing-branch/nmap_prod:latest
+          base-image: ubuntu:22.04
+          image: testing-branch/auto-update:latest
 
-      - name: Build and push
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          push: true
-          tags: user/app:latest
+      - name: pull base image
         if: steps.check.outputs.needs-updating == 'true'
+        run: | 
+            docker pull node:18-alpine
+
+      - name : Reuild docker image with new base image
+        run: |
+          if [ "${{ steps.check.outputs.needs-updating}}" == "true" ]; then
+            docker build -t testing-branch/auto-update:latest .
+          fi
+
+      - name: Publish the docker image
+        env:
+            TOKEN: ${{secrets.GITHUB_TOKEN}}
+        run: |
+            if [ "${{ steps.check.outputs.needs-updating }}" == "true" ]; then
+              echo $TOKEN | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
+              [[ "$GITHUB_REF_NAME" == "master" ]] && export TAG="latest" || TAG="$GITHUB_REF_NAME"
+              docker push ghcr.io/testing-branch/auto-update:latest
+            fi
