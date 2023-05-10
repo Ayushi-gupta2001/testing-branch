@@ -27,15 +27,9 @@ jobs:
           image: ghcr.io/ayushi-gupta2001/testing-branch/auto-update:latest
           image-reg-username: ${{ github.actor }}
           image-reg-password: ${{ secrets.SECRET_TOKEN }}
-    
-  build:
-    needs: check
-    runs-on: ubuntu-latest
-    # if: needs.check.outputs.need_update.result == 'success'
-    steps:
-      - env: 
-          OUTPUT1: ${{needs.check.outputs.need_update}}
-        run: echo "$OUTPUT1"
+
+      - name: check if there is any update
+        run: echo "${{steps.check.outputs.need_update}}"
   
   # update:
   #   needs: check
