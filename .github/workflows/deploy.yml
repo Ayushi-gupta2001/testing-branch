@@ -1,23 +1,24 @@
-name: update image when upstream is updats
+name: update image when upstream is updates
 
 on:
   push:
-    branches: 
+    branches:
       - auto-update
+
 jobs:
   check:
     runs-on: ubuntu-latest
     outputs:
-      need_update: ${{ steps.check.outputs.need_update }}
+      need_update: ${{ needs.check.outputs.need_update }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
       - uses: docker/login-action@v1
         with:
-            registry: ghcr.io
-            username: ${{ github.actor }}
-            password: ${{ secrets.SECRET_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.SECRET_TOKEN }}
 
       - name: Check if update available
         id: check
@@ -27,19 +28,19 @@ jobs:
           image: ghcr.io/ayushi-gupta2001/testing-branch/auto-update:latest
           image-reg-username: ${{ github.actor }}
           image-reg-password: ${{ secrets.SECRET_TOKEN }}
-    
+
   build:
     needs: check
     runs-on: ubuntu-latest
-    if: needs.check.outputs.need_update.result == 'success'
+    if: needs.check.outputs.need_update == 'true'
     steps:
       - run: echo "Need update"
-  
+
   update:
     needs: check
     runs-on: ubuntu-latest
-    if: needs.check.outputs.need_update.result == 'false'
-    steps: 
+    if: needs.check.outputs.need_update == 'false'
+    steps:
       - run: echo "No need to update Image"
 
       # - name: if it is update , notifiy us!!
