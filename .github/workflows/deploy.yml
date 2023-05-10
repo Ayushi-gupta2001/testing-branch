@@ -5,7 +5,7 @@ on:
     branches: 
       - auto-update
 jobs:
-  check_update:
+  check:
     runs-on: ubuntu-latest
     outputs:
       need_update: ${{ steps.check.outputs.need_update }}
@@ -27,13 +27,17 @@ jobs:
           image: ghcr.io/ayushi-gupta2001/testing-branch/auto-update:latest
           image-reg-username: ${{ github.actor }}
           image-reg-password: ${{ secrets.SECRET_TOKEN }}
-
-  update_value:
+    
+  build:
+    needs: check
     runs-on: ubuntu-latest
-    needs: check_update    
-    steps: 
-      - run: echo need_update ${{needs.check_update.output.need_update }}
-        # if: ${{needs.check_update.output.need_update}}== 'true'
+    if: needs.check.outputs.need_update == "true"
+    steps:
+      - run: echo "Need update"
+
+      # - name: if it is update , notifiy us!!
+      #   run: echo need_update ${{steps.check_update.output.need_update }}
+      #   if: steps.check_update.output.need_update == 'true'
 
   # no_update_value:
   #   runs-on: ubuntu-latest
