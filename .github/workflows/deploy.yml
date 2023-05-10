@@ -35,4 +35,4 @@ jobs:
 
       - name: Check Value
         run: echo "Needs updating, Please update IMage"
-        if: steps.check.need-update='true'
+        if: steps.check.need-update == 'true'
