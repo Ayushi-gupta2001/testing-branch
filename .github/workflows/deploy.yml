@@ -34,6 +34,13 @@ jobs:
     if: needs.check.outputs.need_update.result == 'true'
     steps:
       - run: echo "Need update"
+  
+  update:
+    needs: check
+    runs-on: ubuntu-latest
+    if: needs.check.outputs.need_update.result == 'false'
+    steps: 
+      - run: echo "No need to update"
 
       # - name: if it is update , notifiy us!!
       #   run: echo need_update ${{steps.check_update.output.need_update }}
