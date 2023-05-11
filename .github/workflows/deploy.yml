@@ -31,20 +31,17 @@ jobs:
       - name: check if there is any update
         run: echo "${{steps.check.outputs.needs-update}}"
   
-  # update:
-  #   needs: check
-  #   runs-on: ubuntu-latest
-  #   if: needs.check.outputs.need_update.result == 'false'
-  #   steps: 
-  #     - run: echo "No need to update Image"
+  update:
+    needs: check
+    runs-on: ubuntu-latest
+    if: needs.check.outputs.needs-update.result == 'true'
+    steps: 
+      - run: echo "Need to update Image! ${{needs.check.outputs.needs-update.result}}"
 
-      # - name: if it is update , notifiy us!!
-      #   run: echo need_update ${{steps.check_update.output.need_update }}
-      #   if: steps.check_update.output.need_update == 'true'
-
-  # no_update_value:
-  #   runs-on: ubuntu-latest
-  #   needs: check_update
-  #   steps: 
-  #     - run: echo No need to update ${{ needs.check_update.output.need_update }}
-  #       if: $steps.check_update.output.need_update == 'false'
+  no_update_value:
+    runs-on: ubuntu-latest
+    needs: check_update
+    if: needs.check_update.output.needs-update == 'false'
+    steps: 
+      - run: echo "No need to update ${{needs.check.outputs.needs-update.result}}"
+      
