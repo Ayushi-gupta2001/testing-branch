@@ -8,7 +8,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     outputs:
-      needs_update: ${{ steps.check.outputs.needs_update }}
+      needs-update: ${{ steps.check.outputs.needs-update }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -29,7 +29,7 @@ jobs:
           image-reg-password: ${{ secrets.SECRET_TOKEN }}
 
       - name: check if there is any update
-        run: echo "${{steps.check.outputs.needs_update}}"
+        run: echo "${{steps.check.outputs.needs-update}}"
   
   # update:
   #   needs: check
