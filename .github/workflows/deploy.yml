@@ -65,7 +65,7 @@ jobs:
               echo "container is working!!"
             else
               echo "container is not starting after 1 minute!"
-
+            fi
 
       - name: Publish new docker image
         run: docker push  ghcr.io/ayushi-gupta2001/testing-branch/auto-update:2.4
