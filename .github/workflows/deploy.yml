@@ -40,8 +40,8 @@ jobs:
 
   no_update_value:
     runs-on: ubuntu-latest
-    needs: check_update
-    if: needs.check_update.output.needs-update == 'false'
+    needs: check
+    if: needs.check.outputs.needs-update.result == 'false'
     steps: 
       - run: echo "No need to update ${{needs.check.outputs.needs-update.result}}"
       
