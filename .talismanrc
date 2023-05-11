@@ -1,6 +1,6 @@
 fileignoreconfig:
 - filename: .github/workflows/deploy.yml
-  checksum: 6090a84c5b379fed54f11e4e39209383052ddc4688548d0e79599faf6663a6fb
+  checksum: 6b70f5803765c304ae1a201d013619b35f4ae4a099f96fc8c2710c703f8601c4
 - filename: Dockerfile
   checksum: 5ea03d8f03ae167dd925e0e0157f49faaef8f39e86fce30f65a8476b89f2a963
 version: "1.0"
