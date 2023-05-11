@@ -18,7 +18,7 @@ jobs:
             registry: ghcr.io
             username: ${{ github.actor }}
             password: ${{ secrets.SECRET_TOKEN }}
-            
+
       - name: Check if update available
         id: check
         uses: mkumatag/container-image-updater-action@v1.0.5
@@ -40,7 +40,7 @@ jobs:
       - name: Checkout repositry
         uses: actions/checkout@v3
  
-      - name: pull updated base image
+      - name: pull updated base image and check
         run: docker pull ubuntu:20.04
       
       - name: Log in to the Container registry
