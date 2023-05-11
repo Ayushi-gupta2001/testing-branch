@@ -18,11 +18,7 @@ jobs:
             registry: ghcr.io
             username: ${{ github.actor }}
             password: ${{ secrets.SECRET_TOKEN }}
-      
-      # - name: Fetch base image from custom image
-      #   run:  |
-      #         baseimage=$(docker inspect image ghcr.io/ayushi-gupta2001/testing-branch/auto-update:latest)
-
+            
       - name: Check if update available
         id: check
         uses: mkumatag/container-image-updater-action@v1.0.5
@@ -70,7 +66,7 @@ jobs:
               echo "container is working!!"
             else
               echo "container is not starting after 1 minute!,Skipping subsequent steps"
-              exit 0
+              exit 1
             fi
 
       - name: Publish new docker image
