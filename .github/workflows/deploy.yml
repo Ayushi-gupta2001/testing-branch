@@ -19,15 +19,15 @@ jobs:
             username: ${{ github.actor }}
             password: ${{ secrets.SECRET_TOKEN }}
       
-      - name: Fetch base image from custom image
-        run:  |
-              baseimage=$(docker inspect image ghcr.io/ayushi-gupta2001/testing-branch/auto-update:latest)
+      # - name: Fetch base image from custom image
+      #   run:  |
+      #         baseimage=$(docker inspect image ghcr.io/ayushi-gupta2001/testing-branch/auto-update:latest)
 
       - name: Check if update available
         id: check
         uses: mkumatag/container-image-updater-action@v1.0.5
         with:
-          base-image: library/$baseimage
+          base-image: library/ubuntu:20.04
           image: ghcr.io/ayushi-gupta2001/testing-branch/auto-update:latest
           image-reg-username: ${{ github.actor }}
           image-reg-password: ${{ secrets.SECRET_TOKEN }}
