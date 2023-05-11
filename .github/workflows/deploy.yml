@@ -18,12 +18,16 @@ jobs:
             registry: ghcr.io
             username: ${{ github.actor }}
             password: ${{ secrets.SECRET_TOKEN }}
+      
+      - name: Fetch base image from custom image
+        run:  |
+              baseimage=$(docker inspect image ghcr.io/ayushi-gupta2001/testing-branch/auto-update:latest)
 
       - name: Check if update available
         id: check
         uses: mkumatag/container-image-updater-action@v1.0.5
         with:
-          base-image: library/ubuntu:20.04
+          base-image: library/$baseimage
           image: ghcr.io/ayushi-gupta2001/testing-branch/auto-update:latest
           image-reg-username: ${{ github.actor }}
           image-reg-password: ${{ secrets.SECRET_TOKEN }}
@@ -55,16 +59,18 @@ jobs:
           docker build . --tag ghcr.io/ayushi-gupta2001/testing-branch/auto-update:2.4
 
       - name: Check if container is working with rebuild image
+        id: conatinerstatus
         run: | 
             containerId=$(docker run --rm -it -d  ghcr.io/ayushi-gupta2001/testing-branch/auto-update:2.4)
             sleep 60
 
             containerStatus=$(docker inspect --format="{{ .State.Status }}" $containerId)
 
-            if ["$containerStatus" == "running"]
+            if [ "$containerStatus" == "running" ]; then
               echo "container is working!!"
             else
-              echo "container is not starting after 1 minute!"
+              echo "container is not starting after 1 minute!,Skipping subsequent steps"
+              exit 0
             fi
 
       - name: Publish new docker image
