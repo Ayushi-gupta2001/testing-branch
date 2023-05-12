@@ -15,7 +15,7 @@ jobs:
   check_image_update: 
     runs-on: "ubuntu-22.04"
     outputs:
-      image_update_value: ${{ steps.check.outputs.image_update_value }}
+      needs-update: ${{ steps.check.outputs.needs-update}}
     steps: 
 
       - name: Checkout
@@ -37,15 +37,15 @@ jobs:
           image-reg-password: ${{ secrets.SECRET_TOKEN }}
 
       - name: check if there is any update
-        run: echo "${{steps.check.outputs.image_update_value}}"
+        run: echo "${{steps.check.outputs.needs-update}}"
 
   
   if_there_is_an_update: 
     needs: check_image_update
     runs-on: "ubuntu-22.04"
-    if: needs.check.outputs.image_update_value == 'true'
+    if: needs.check.outputs.needs-update == 'true'
     steps: 
-      - run: echo "Need to update ${{needs.check.outputs.image_update_value}}"
+      - run: echo "Need to update ${{needs.check.outputs.needs-update}}"
       - name: Checkout repositry
         uses: actions/checkout@v3
  
@@ -85,7 +85,7 @@ jobs:
   no_update_value:
     runs-on: "ubuntu-22.04"
     needs: check_image_update
-    if: needs.check.outputs.image_update_value == 'false'
+    if: needs.check.outputs.needs-update == 'false'
     steps: 
-      - run: echo "No need to update ${{needs.check.outputs.image_update_value}}"
+      - run: echo "No need to update ${{needs.check.outputs.needs-update}}"
       
