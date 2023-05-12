@@ -31,8 +31,8 @@ jobs:
         id: check
         uses: mkumatag/container-image-updater-action@v1.0.5
         with:
-          base-image: library/python:3.9-alpine
-          image: ghcr.io/ayushi-gupta2001/testing-branch/flan-scan:latest
+          base-image: library/ubuntu:22.04
+          image: ghcr.io/ayushi-gupta2001/testing-branch/nmap_prod:latest
           image-reg-username: ${{ github.actor }}
           image-reg-password: ${{ secrets.SECRET_TOKEN }}
 
@@ -61,12 +61,12 @@ jobs:
 
       - name: Reuild the Docker image
         run: 
-          docker build . --tag ghcr.io/ayushi-gupta2001/testing-branch/flan-scan:latest
+          docker build . --tag ghcr.io/ayushi-gupta2001/testing-branch/nmap_prod:latest
 
       - name: Check if container is working with rebuild image
         id: conatinerstatus
         run: | 
-            containerId=$(docker run --rm -it -d  ghcr.io/ayushi-gupta2001/testing-branch/flan-scan:latest)
+            containerId=$(docker run --rm -it -d  ghcr.io/ayushi-gupta2001/testing-branch/nmap_prod:latest)
             sleep 60
 
             containerStatus=$(docker inspect --format="{{ .State.Status }}" $containerId)
@@ -79,7 +79,7 @@ jobs:
             fi
 
       - name: Publish new docker image
-        run: docker push  ghcr.io/ayushi-gupta2001/testing-branch/flan-scan:latest
+        run: docker push  ghcr.io/ayushi-gupta2001/testing-branch/nmap_prod:latest
 
 
   no_update_value:

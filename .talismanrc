@@ -1,6 +1,16 @@
 fileignoreconfig:
 - filename: .github/workflows/deploy.yml
   checksum: 6b70f5803765c304ae1a201d013619b35f4ae4a099f96fc8c2710c703f8601c4
+- filename: .github/workflows/original.yml
+  checksum: 3d703b2942b524be36f8c467a3d86b87dc1d2bca993b12c54a4c8c8465690e81
 - filename: Dockerfile
   checksum: 5ea03d8f03ae167dd925e0e0157f49faaef8f39e86fce30f65a8476b89f2a963
+- filename: README.md
+  checksum: 6697a2e792c945ea133e780943ae4a9702d4c4999a1712020f7bd2ab58b35f28
+- filename: contrib/parsers/flan_xml_parser.py
+  checksum: 60a44e95a59d95053c34be8105ee0014958feb5e37f73cb74be547fb135f9809
+- filename: kubernetes_templates/cron_job.yaml
+  checksum: e4aa87304a08b65e071d736cf937e46972b3d52891dce60a6bb4dadd867d59b9
+- filename: kubernetes_templates/deployment.yaml
+  checksum: 023a69bcb916fdf19be9a73cd5a3f3b446339f1cd4f5dbc639704bdd54b75fb0
 version: "1.0"
