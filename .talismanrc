@@ -2,7 +2,7 @@ fileignoreconfig:
 - filename: .github/workflows/deploy.yml
   checksum: e18f5cc96512aeb6bb1164bceb25b5ded4ca57ac67ef61acc05373eda3f0de27
 - filename: .github/workflows/original.yml
-  checksum: 3d703b2942b524be36f8c467a3d86b87dc1d2bca993b12c54a4c8c8465690e81
+  checksum: 8825d87add86b77f75e2c824c99e8d0b9126fbba73871393fce2de57b305bebe
 - filename: Dockerfile
   checksum: 5ea03d8f03ae167dd925e0e0157f49faaef8f39e86fce30f65a8476b89f2a963
 - filename: README.md
