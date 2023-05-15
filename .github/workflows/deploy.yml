@@ -19,8 +19,8 @@ jobs:
       needs-update: ${{ steps.check.outputs.needs-update }}
     strategy:
       matrix:
-        fundwave_container_base_image: [ python:3.9-alpine ]
-        fundwave_container_custom_image: [ ghcr.io/ayushi-gupta2001/testing-branch/flan-scan:latest ]
+        fundwave_container_base_image: [ "python:3.9-alpine" ]
+        fundwave_container_custom_image: [ "ghcr.io/ayushi-gupta2001/testing-branch/flan-scan:latest" ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
